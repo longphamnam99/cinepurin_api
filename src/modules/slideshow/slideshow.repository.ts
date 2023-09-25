@@ -1,9 +1,18 @@
-import { EntityRepository, Repository } from 'typeorm';
-import { Slideshow } from 'src/entities/slideshow.entity';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { SlideshowEntity } from 'src/entities/slideshows.entity';
+import { BaseRepository } from 'src/interfaces/BaseRepository.interface';
+import { ISlideshowRepository } from 'src/interfaces/ISlideshowRepository.interface';
+import { Repository } from 'typeorm';
 
-@EntityRepository(Slideshow)
-export class SlideshowRepository extends Repository<Slideshow> {
-    async getAllSlideshows(): Promise<Slideshow[]> {
-        return this.find();
+@Injectable()
+export class SlideshowRepository
+    extends BaseRepository<SlideshowEntity, Repository<SlideshowEntity>>
+    implements ISlideshowRepository {
+
+    constructor(
+        @InjectRepository(SlideshowEntity)
+        protected readonly repository: Repository<SlideshowEntity>) {
+        super(repository);
     }
 }

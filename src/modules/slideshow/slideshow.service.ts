@@ -1,15 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable, Inject } from '@nestjs/common';
 import { SlideshowDto } from 'src/dto/slideshow.dto';
-import { Slideshow } from 'src/entities/slideshow.entity';
-import { SlideshowRepository } from './slideshow.repository';
+import { Slideshow } from 'src/models/slideshow.model';
+import { ISlideshowRepository } from 'src/interfaces/ISlideshowRepository.interface';
 
 @Injectable()
 export class SlideshowService {
     constructor(
-        @InjectRepository(SlideshowRepository)
-        private slideshowRepository: Repository<SlideshowRepository>,
+        @Inject('ISlideshowRepository')
+        private readonly slideshowRepository: ISlideshowRepository
     ) {}
     private Slideshows: SlideshowDto[] = [
         { id: 1, name: 'Slideshow 0', url: '', caption: '' },
@@ -17,8 +15,8 @@ export class SlideshowService {
         { id: 3, name: 'Slideshow 2', url: '', caption: '' },
     ];
 
-    async getSlideshow(): Promise<Slideshow[]> {
-        return this.slideshowRepository.find();
+    async findAll(): Promise<Slideshow[]> {
+        return await this.slideshowRepository.findAll();
     }
 
     createSlideshow(data: SlideshowDto): SlideshowDto {

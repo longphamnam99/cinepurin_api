@@ -12,9 +12,9 @@ export class Slideshow {
     caption?: string;
 
     constructor({id, name, url, caption}: InputData) {
-        if(!id) this.id = id;
-        if(!name) this.name = name;
-        if(!url) this.url = url;
-        if(!caption) this.caption = caption;
+        if(id) this.id = id;
+        if(name) this.name = name;
+        if(url) this.url = url;
+        if(caption) this.caption = caption;
     }
 }
