@@ -10,10 +10,28 @@ export class AccountsEntity extends BaseEntity {
   username: string;
 
   @Column()
+  email: string;
+
+  @Column()
   password: string;
 
   @Column()
   permission: string;
 
+  @Column()
+  gender: number;
+
+  @Column()
+  birthday: string;
+
+  @Column()
+  address: string;
+
+  @Column()
+  idcard: string;
+
+  @Column()
+  phone: string;
+  
   public roles: Role[]
 }

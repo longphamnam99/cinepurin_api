@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { CategoryModule } from './modules/categories/category.module';
 import { SlideshowModule } from './modules/slideshow/slideshow.module';
+import { VnpayModule } from './modules/vnpay/vnpay.module';
+
 import { CarModule } from './modules/cars/car.module';
 import { AuthModule } from './modules/auth/auth.module';
 
@@ -14,6 +16,9 @@ import { jwtConstants } from 'src/constant/constant';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './modules/auth/auth.guard';
 import { RolesGuard } from './modules/auth/roles.guard';
+import { VnpayController } from './modules/vnpay/vnpay.controller';
+import { OrdersModule } from './modules/orders/orders.module';
+import { PaymentsModule } from './modules/payments/payments.module';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -40,8 +45,11 @@ dotenv.config();
     CarModule,
     AuthModule,
     SlideshowModule,
+    VnpayModule,
+    OrdersModule,
+    PaymentsModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, VnpayController],
   providers: [
     AppService,
     {

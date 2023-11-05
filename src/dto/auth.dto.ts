@@ -2,17 +2,25 @@ export class AuthResponseDto {
   id: number;
   username: string;
   permission: string;
+  email: string;
 
-  constructor({ id, username, permission }) {
+  constructor({ id, username, email, permission }) {
     this.id = id;
     this.username = username;
     this.permission = permission;
+    this.email = email;
   }
 }
 
 export class AuthPayloadDto {
   username: string;
+  email: string;
   password: string;
+  gender: number;
+  birthday: string;
+  address: string;
+  idcard: string;
+  phone: string;
 }
 
 export class AuthPermission {

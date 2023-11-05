@@ -31,13 +31,28 @@ export class AuthRepository implements IAuthRepository {
   }
 
   async signUp(auth: AuthPayloadDto): Promise<AuthResponseDto> {
-    const { username, password } = auth;
+    const { 
+      username, 
+      password,
+      gender,
+      birthday,
+      address,
+      idcard,
+      phone,
+      email
+    } = auth;
     const salt = await bcrypt.genSalt();
     const hash = await bcrypt.hash(password, salt);
     return this.repository.save({
       username,
       password: hash,
-      permission: 'ROLE_ADMIN'
+      gender,
+      birthday,
+      address,
+      idcard,
+      phone,
+      email,
+      permission: 'ROLE_USER'
     });
   }
 }

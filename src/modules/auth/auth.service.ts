@@ -19,8 +19,16 @@ export class AuthService {
   }
 
   async signUp(auth: AuthPayloadDto): Promise<AuthResponseDto | boolean> {
-    const { username, password } = auth;
-    if (!username || !password) return false;
+    const { 
+      username, 
+      password,
+      birthday,
+      address,
+      idcard,
+      phone,
+      email
+    } = auth;
+    if (!username || !password || !birthday || !address || !idcard || !phone || !email) return false;
     const userDto: AuthResponseDto = new AuthResponseDto(await this.authRepository.signUp(auth));
     return userDto;
   }
