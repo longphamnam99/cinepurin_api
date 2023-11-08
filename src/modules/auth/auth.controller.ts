@@ -65,7 +65,6 @@ export class AuthController {
   }
 
   @Post('/logout')
-  @Public()
   async logout(@Res() res: Response): Promise<ResponseType<AuthResponseDto | boolean>> {
     return res.json(
       new ResponseData("Logout success", ServerStatus.OK, ServerMessage.OK)

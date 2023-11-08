@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Res, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Res, Body, Param, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { Response } from 'express';
 import { ResponseData } from 'src/services/response.service';
@@ -7,6 +7,9 @@ import { Product } from '../../models/product.model';
 import { ProductDto } from 'src/dto/product.dto';
 import { ServerMessage, ServerStatus } from 'src/constant/enum';
 import { Public } from 'src/constant/decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Multer } from 'multer'; 
+import { storageConfig } from 'helpers/config';
 
 @Controller('products')
 export class ProductController {
@@ -14,19 +17,20 @@ export class ProductController {
 
   @Public()
   @Get()
-  getProducts(@Res() res: Response): ResponseType<Product> {
+  async getProducts(@Res() res: Response): Promise<ResponseType<Product>> {
     try {
-      return res.json(new ResponseData(this.productService.findAll(), ServerStatus.OK, ServerMessage.OK));
+      return res.json(new ResponseData(await this.productService.findAll(), ServerStatus.OK, ServerMessage.OK));
     } catch (error) {
       return res.json(new ResponseData(null, ServerStatus.ERROR, ServerMessage.ERROR));
     }
   }
 
-  @Public()
   @Post()
-  createProduct(@Body() product: ProductDto, @Res() res: Response): ResponseType<Product> {
+  @UseInterceptors(FileInterceptor('image', {storage: storageConfig()}))
+  async createProduct(@Body() product: ProductDto, @UploadedFile() file: Multer.File, @Res() res: Response): Promise<ResponseType<Product>> {
     try {
-      return res.json(new ResponseData(this.productService.createProduct(product), ServerStatus.OK, ServerMessage.OK));
+      console.log(file)
+      return res.json(new ResponseData(await this.productService.create(product), ServerStatus.OK, ServerMessage.OK));
     } catch (error) {
       return res.json(new ResponseData(null, ServerStatus.ERROR, ServerMessage.ERROR));
     }
@@ -34,9 +38,9 @@ export class ProductController {
 
   @Public()
   @Get('/:id')
-  detailProduct(@Param('id') id: number, @Res() res: Response): ResponseType<Product> {
+  async detailProduct(@Param('id') id: number, @Res() res: Response): Promise<ResponseType<Product>> {
     try {
-      return res.json(new ResponseData(this.productService.findById(id), ServerStatus.OK, ServerMessage.OK));
+      return res.json(new ResponseData(await this.productService.findById(id), ServerStatus.OK, ServerMessage.OK));
     } catch (error) {
       return res.json(new ResponseData(null, ServerStatus.ERROR, ServerMessage.ERROR));
     }
@@ -44,9 +48,9 @@ export class ProductController {
 
   @Public()
   @Put('/:id')
-  updateProduct(@Param('id') id: number, @Body() product: ProductDto, @Res() res: Response): ResponseType<Product> {
+  async updateProduct(@Param('id') id: number, @Body() product: ProductDto, @Res() res: Response): Promise<ResponseType<Product>> {
     try {
-      return res.json(new ResponseData(this.productService.updateProduct(id, product), ServerStatus.OK, ServerMessage.OK));
+      return res.json(new ResponseData(await this.productService.update(id, product), ServerStatus.OK, ServerMessage.OK));
     } catch (error) {
       return res.json(new ResponseData(null, ServerStatus.ERROR, ServerMessage.ERROR));
     }
@@ -54,9 +58,9 @@ export class ProductController {
 
   @Public()
   @Delete('/:id')
-  deleteProduct(@Param('id') id: number, @Res() res: Response): ResponseType<Product> {
+  async deleteProduct(@Param('id') id: number, @Res() res: Response): Promise<ResponseType<Product>> {
     try {
-      return res.json(new ResponseData(this.productService.deleteProduct(id), ServerStatus.OK, ServerMessage.OK));
+      return res.json(new ResponseData(await this.productService.delete(id), ServerStatus.OK, ServerMessage.OK));
     } catch (error) {
       return res.json(new ResponseData(null, ServerStatus.ERROR, ServerMessage.ERROR));
     }

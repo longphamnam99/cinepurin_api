@@ -8,7 +8,7 @@ export class CategoryService {
   constructor(
     @Inject('ICategoryRepository')
     private readonly categoryRepository: ICategoryRepository,
-  ) {}
+  ) { }
 
   async findAll(): Promise<Category[]> {
     return await this.categoryRepository.findAll();

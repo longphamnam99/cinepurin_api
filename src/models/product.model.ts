@@ -1,13 +1,28 @@
 export class Product {
   id?: number;
-  productName?: string;
-  category_id?: number;
-  price?: string;
+  name?: string;
+  image?: string;
+  description?: string;
+  category?: string;
+  price?: number;
+  premiere?: Date;
+  actor?: string;
+  director?: string;
+  type?: number;
+  trailer?: string;
 
-  constructor({ id, productName, category_id, price }) {
+
+  constructor({ id, name, image, description, category, price, premiere, actor, director, type, trailer }) {
     if (id !== undefined) this.id = id;
-    if (productName !== undefined) this.productName = productName;
+    if (name !== undefined) this.name = name;
+    if (image !== undefined) this.image = image;
+    if (description !== undefined) this.description = description;
+    if (category !== undefined) this.category = category;
     if (price !== undefined) this.price = price;
-    if (category_id !== undefined) this.category_id = category_id;
+    if (premiere !== undefined) this.premiere = premiere;
+    if (actor !== undefined) this.actor = actor;
+    if (director !== undefined) this.director = director;
+    if (type !== undefined) this.type = type;
+    if (trailer !== undefined) this.trailer = trailer;
   }
 }

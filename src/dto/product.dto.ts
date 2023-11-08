@@ -1,5 +1,12 @@
 export class ProductDto {
-  productName: string;
-  category_id: number;
-  price: string;
+  name?: string;
+  image?: string;
+  description?: string;
+  category?: string;
+  price?: number;
+  premiere?: Date;
+  actor?: string;
+  director?: string;
+  type?: number;
+  trailer?: string;
 }
