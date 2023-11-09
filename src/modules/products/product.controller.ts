@@ -28,10 +28,18 @@ export class ProductController {
   @Post()
   @UseInterceptors(FileInterceptor('image', {storage: storageConfig()}))
   async createProduct(@Body() product: ProductDto, @UploadedFile() file: Multer.File, @Res() res: Response): Promise<ResponseType<Product>> {
+    const dataSend = {
+      ...product,
+      image: `/static/uploads/${file.filename}`,
+      category: JSON.stringify(product.category),
+      actor: JSON.stringify(product.actor),
+      director: JSON.stringify(product.actor),
+    }
+    console.log(dataSend)
     try {
-      console.log(file)
-      return res.json(new ResponseData(await this.productService.create(product), ServerStatus.OK, ServerMessage.OK));
+      return res.json(new ResponseData(await this.productService.create(dataSend), ServerStatus.OK, ServerMessage.OK));
     } catch (error) {
+      console.log(error)
       return res.json(new ResponseData(null, ServerStatus.ERROR, ServerMessage.ERROR));
     }
   }
