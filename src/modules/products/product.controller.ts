@@ -30,12 +30,8 @@ export class ProductController {
   async createProduct(@Body() product: ProductDto, @UploadedFile() file: Multer.File, @Res() res: Response): Promise<ResponseType<Product>> {
     const dataSend = {
       ...product,
-      image: `/static/uploads/${file.filename}`,
-      category: JSON.stringify(product.category),
-      actor: JSON.stringify(product.actor),
-      director: JSON.stringify(product.actor),
+      image: `/static/uploads/${file.filename}`
     }
-    console.log(dataSend)
     try {
       return res.json(new ResponseData(await this.productService.create(dataSend), ServerStatus.OK, ServerMessage.OK));
     } catch (error) {
@@ -56,10 +52,16 @@ export class ProductController {
 
   @Public()
   @Put('/:id')
-  async updateProduct(@Param('id') id: number, @Body() product: ProductDto, @Res() res: Response): Promise<ResponseType<Product>> {
+  @UseInterceptors(FileInterceptor('image', {storage: storageConfig()}))
+  async updateProduct(@Param('id') id: number, @Body() product: ProductDto, @UploadedFile() file: Multer.File, @Res() res: Response): Promise<ResponseType<Product>> {
     try {
-      return res.json(new ResponseData(await this.productService.update(id, product), ServerStatus.OK, ServerMessage.OK));
+      const dataSend = {
+        ...product,
+        image: `/static/uploads/${file.filename}`
+      }
+      return res.json(new ResponseData(await this.productService.update(id, dataSend), ServerStatus.OK, ServerMessage.OK));
     } catch (error) {
+      console.log(error)
       return res.json(new ResponseData(null, ServerStatus.ERROR, ServerMessage.ERROR));
     }
   }

@@ -4,7 +4,7 @@ export class ProductDto {
   description?: string;
   category?: string;
   price?: number;
-  premiere?: Date | string;
+  premiere?: Date;
   actor?: string;
   director?: string;
   type?: number;

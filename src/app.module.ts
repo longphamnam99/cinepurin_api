@@ -19,6 +19,11 @@ import { RolesGuard } from './modules/auth/roles.guard';
 import { VnpayController } from './modules/vnpay/vnpay.controller';
 import { OrdersModule } from './modules/orders/orders.module';
 import { PaymentsModule } from './modules/payments/payments.module';
+import { ActorsModule } from './modules/actors/actors.module';
+import { DirectorsModule } from './modules/directors/directors.module';
+import { LocationsController } from './modules/locations/locations.controller';
+import { LocationsModule } from './modules/locations/locations.module';
+import { QrcodeModule } from './modules/qrcode/qrcode.module';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -48,8 +53,12 @@ dotenv.config();
     VnpayModule,
     OrdersModule,
     PaymentsModule,
+    ActorsModule,
+    DirectorsModule,
+    LocationsModule,
+    QrcodeModule,
   ],
-  controllers: [AppController, VnpayController],
+  controllers: [AppController, VnpayController, LocationsController],
   providers: [
     AppService,
     {
