@@ -3,11 +3,11 @@ export class Product {
   name?: string;
   image?: string;
   description?: string;
-  category?: string;
+  category?: number[];
   price?: number;
   premiere?: Date;
-  actor?: string;
-  director?: string;
+  actor?: number[];
+  director?: number[];
   type?: number;
   trailer?: string;
 
