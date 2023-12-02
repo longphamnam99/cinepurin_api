@@ -496,84 +496,88 @@ app.get('/api/QuanLyRap/LayThongTinLichChieuHeThongRap', function (req, res) {
 });
 
 app.get('/api/QuanLyRap/LayThongTinLichChieuPhim', function (req, res) {
-    dbConn.query(
-        'SELECT * FROM phiminsert JOIN hethongrapvaphim ON phiminsert.maPhim = hethongrapvaphim.maPhim JOIN hethongrap ON hethongrap.hid = hethongrapvaphim.maHeThongRap JOIN theloaiphim ON phiminsert.maTheLoaiPhim = theloaiphim.id WHERE phiminsert.maPhim = ?',
-        [req.query.MaPhim],
-        async (error, results0, fields) => {
-            if (error) throw error;
-            let heThongRapChieu = [];
-            for (const result0 of results0) {
-                heThongRapChieu = await new Promise((resolve, reject) => {
-                    dbConn.query(
-                        'SELECT * FROM hethongrap JOIN hethongrapvacumrap ON hethongrap.hid = hethongrapvacumrap.hethongrap JOIN cumrap ON cumrap.cid = hethongrapvacumrap.cumrap JOIN cumrapvalichchieuinsert ON cumrap.cid = cumrapvalichchieuinsert.cumrap JOIN phiminsertvalichchieuinsert ON cumrapvalichchieuinsert.lichchieuinsert = phiminsertvalichchieuinsert.lichchieuinsert WHERE hethongrap.hid = ? AND phiminsertvalichchieuinsert.phiminsert = ?',
-                        [result0.hid, result0.maPhim],
-                        async (error, results1, fields) => {
-                            if (error) throw error;
-                            let cumRapChieu = [];
-                            for (const result1 of results1) {
-                                cumRapChieu = await new Promise((resolve, reject) => {
-                                    dbConn.query(
-                                        'SELECT * FROM lichchieuinsert JOIN cumrapvalichchieuinsert ON lichchieuinsert.maLichChieu = cumrapvalichchieuinsert.lichchieuinsert JOIN cumrap ON cumrap.cid = cumrapvalichchieuinsert.cumrap JOIN phiminsertvalichchieuinsert ON cumrapvalichchieuinsert.lichchieuinsert = phiminsertvalichchieuinsert.lichchieuinsert WHERE cumrap.cid = ? AND phiminsertvalichchieuinsert.phiminsert = ?',
-                                        [result1.cumrap, result0.maPhim],
-                                        async (error, results2, fields) => {
-                                            if (error) throw error;
-                                            let lichChieuPhim = [];
-                                            for (const result2 of results2) {
-                                                lichChieuPhim.push({
-                                                    maLichChieu: result2.maLichChieu,
-                                                    maRap: result2.maRap,
-                                                    tenRap: result2.tenRap,
-                                                    ngayChieuGioChieu: result2.ngayChieuGioChieu,
-                                                    giaVe: result2.giaVe,
-                                                    thoiLuong: result2.thoiLuong,
-                                                });
-                                            }
-                                            const cumrap = {
-                                                lichChieuPhim: lichChieuPhim,
-                                                maCumRap: result1.maCumRap,
-                                                tenCumRap: result1.tenCumRap,
-                                                hinhAnh: null,
-                                            };
-                                            cumRapChieu.push(cumrap);
-                                            resolve(cumRapChieu);
-                                        },
-                                    );
-                                });
-                            }
-                            const hethong = {
-                                cumRapChieu: cumRapChieu,
-                                maHeThongRap: results1[0]?.maHeThongRap,
-                                tenHeThongRap: results1[0]?.tenHeThongRap,
-                                logo: results1[0]?.logo,
-                            };
-                            heThongRapChieu.push(hethong);
-                            resolve(heThongRapChieu);
-                        },
-                    );
-                });
-            }
-
-            const final = {
-                heThongRapChieu: heThongRapChieu,
-                maPhim: results0[0].maPhim,
-                tenPhim: results0[0].tenPhim,
-                biDanh: results0[0].biDanh,
-                trailer: results0[0].trailer,
-                hinhAnh: results0[0].hinhAnh.toString(),
-                moTa: results0[0].moTa,
-                maNhom: 'GP09',
-                ngayKhoiChieu: results0[0].ngayKhoiChieu,
-                danhGia: results0[0].danhGia,
-                nhaSanXuat: results0[0].nhaSanXuat,
-                daoDien: results0[0].daoDien,
-                dienVien: results0[0].dienVien,
-                maTheLoaiPhim: results0[0].maTheLoaiPhim,
-                tenTheLoai: results0[0].tenTheLoai,
-                dinhDang: results0[0].dinhDang,
-            };
-            return res.send(final);
-        },
-    );
+    try {
+        dbConn.query(
+            'SELECT * FROM phiminsert JOIN hethongrapvaphim ON phiminsert.maPhim = hethongrapvaphim.maPhim JOIN hethongrap ON hethongrap.hid = hethongrapvaphim.maHeThongRap JOIN theloaiphim ON phiminsert.maTheLoaiPhim = theloaiphim.id WHERE phiminsert.maPhim = ?',
+            [req.query.MaPhim],
+            async (error, results0, fields) => {
+                if (error) throw error;
+                let heThongRapChieu = [];
+                for (const result0 of results0) {
+                    heThongRapChieu = await new Promise((resolve, reject) => {
+                        dbConn.query(
+                            'SELECT * FROM hethongrap JOIN hethongrapvacumrap ON hethongrap.hid = hethongrapvacumrap.hethongrap JOIN cumrap ON cumrap.cid = hethongrapvacumrap.cumrap JOIN cumrapvalichchieuinsert ON cumrap.cid = cumrapvalichchieuinsert.cumrap JOIN phiminsertvalichchieuinsert ON cumrapvalichchieuinsert.lichchieuinsert = phiminsertvalichchieuinsert.lichchieuinsert WHERE hethongrap.hid = ? AND phiminsertvalichchieuinsert.phiminsert = ?',
+                            [result0.hid, result0.maPhim],
+                            async (error, results1, fields) => {
+                                if (error) throw error;
+                                let cumRapChieu = [];
+                                for (const result1 of results1) {
+                                    cumRapChieu = await new Promise((resolve, reject) => {
+                                        dbConn.query(
+                                            'SELECT * FROM lichchieuinsert JOIN cumrapvalichchieuinsert ON lichchieuinsert.maLichChieu = cumrapvalichchieuinsert.lichchieuinsert JOIN cumrap ON cumrap.cid = cumrapvalichchieuinsert.cumrap JOIN phiminsertvalichchieuinsert ON cumrapvalichchieuinsert.lichchieuinsert = phiminsertvalichchieuinsert.lichchieuinsert WHERE cumrap.cid = ? AND phiminsertvalichchieuinsert.phiminsert = ?',
+                                            [result1.cumrap, result0.maPhim],
+                                            async (error, results2, fields) => {
+                                                if (error) throw error;
+                                                let lichChieuPhim = [];
+                                                for (const result2 of results2) {
+                                                    lichChieuPhim.push({
+                                                        maLichChieu: result2.maLichChieu,
+                                                        maRap: result2.maRap,
+                                                        tenRap: result2.tenRap,
+                                                        ngayChieuGioChieu: result2.ngayChieuGioChieu,
+                                                        giaVe: result2.giaVe,
+                                                        thoiLuong: result2.thoiLuong,
+                                                    });
+                                                }
+                                                const cumrap = {
+                                                    lichChieuPhim: lichChieuPhim,
+                                                    maCumRap: result1.maCumRap,
+                                                    tenCumRap: result1.tenCumRap,
+                                                    hinhAnh: null,
+                                                };
+                                                cumRapChieu.push(cumrap);
+                                                resolve(cumRapChieu);
+                                            },
+                                        );
+                                    });
+                                }
+                                const hethong = {
+                                    cumRapChieu: cumRapChieu,
+                                    maHeThongRap: results1[0]?.maHeThongRap,
+                                    tenHeThongRap: results1[0]?.tenHeThongRap,
+                                    logo: results1[0]?.logo,
+                                };
+                                heThongRapChieu.push(hethong);
+                                resolve(heThongRapChieu);
+                            },
+                        );
+                    });
+                }
+    
+                const final = {
+                    heThongRapChieu: heThongRapChieu,
+                    maPhim: results0[0].maPhim,
+                    tenPhim: results0[0].tenPhim,
+                    biDanh: results0[0].biDanh,
+                    trailer: results0[0].trailer,
+                    hinhAnh: results0[0].hinhAnh.toString(),
+                    moTa: results0[0].moTa,
+                    maNhom: 'GP09',
+                    ngayKhoiChieu: results0[0].ngayKhoiChieu,
+                    danhGia: results0[0].danhGia,
+                    nhaSanXuat: results0[0].nhaSanXuat,
+                    daoDien: results0[0].daoDien,
+                    dienVien: results0[0].dienVien,
+                    maTheLoaiPhim: results0[0].maTheLoaiPhim,
+                    tenTheLoai: results0[0].tenTheLoai,
+                    dinhDang: results0[0].dinhDang,
+                };
+                return res.send(final);
+            },
+        );
+    } catch (error) {
+        return []
+    }
 });
 
 app.post('/api/QuanLyRap/AddCumRap', function (req, res) {
