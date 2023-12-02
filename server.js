@@ -556,7 +556,7 @@ app.get('/api/QuanLyRap/LayThongTinLichChieuPhim', function (req, res) {
     
                 const final = {
                     heThongRapChieu: heThongRapChieu,
-                    maPhim: results0[0].maPhim,
+                    maPhim: results0[0]?.maPhim || null,
                     tenPhim: results0[0].tenPhim,
                     biDanh: results0[0].biDanh,
                     trailer: results0[0].trailer,
