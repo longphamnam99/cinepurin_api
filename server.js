@@ -58,6 +58,20 @@ const validateToken = (req, res) => {
         return res.status(401).send(error);
     }
 };
+
+app.get('/api/create_qr', async (req, res) => {
+    try {
+        const qr = require('qrcode');
+        const url = req.query.url;
+        const dataURL = await qr.toDataURL(url);
+
+        res.send(`<img src="${dataURL}" alt="QR Code">`);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+})
+
 // VNPay
 app.get('/api/create_payment_url', function (req, res, next) {
     process.env.TZ = 'Asia/Ho_Chi_Minh';
